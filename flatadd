@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# Search Flatpak repository and display apps with fzf for install or uninstall.
+# flatsearch tube
+
+if [ "${#}" -eq 0 ]; then
+	echo "Search term required." >&2
+	exit 1
+fi
+
+flatpak_preview() {
+	local app
+	app="$(echo "${1}" | awk -F'\t' '{print $3}')"
+	flatpak info "${app}" 2>/dev/null || echo "${1}" | sed 's/\t\t*/\n/g'
+}
+export -f flatpak_preview
+
+app="$(
+	flatpak search --columns=all "${@}" |
+		fzf --preview 'flatpak_preview {}' \
+			--reverse \
+			--cycle \
+			--bind change:first \
+			--bind esc:cancel+clear-selection \
+			--height=100% \
+			--border=none \
+			--prompt='$ flatpak install ' \
+			--no-separator |
+		awk -F'\t' '{print $3}'
+)"
+
+if [ -z "${app}" ]; then
+	exit 1
+else
+  echo "flatpak install" "${app}" "${@}" >&2
+	flatpak install "${app}"
+fi
+

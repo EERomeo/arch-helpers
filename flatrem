@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Show info and uninstall flatpak apps with fzf
+#   flatapp [arguments]
+
+flatpak_preview() {
+	app="$(echo "${1}" | awk -F'\t' '{print $2}')"
+	flatpak info "${app}"
+}
+export -f flatpak_preview
+
+app="$(
+	flatpak list --app --columns=name,application |
+		fzf --preview 'flatpak_preview {}' \
+			--reverse \
+			--cycle \
+			--bind change:first \
+			--bind esc:cancel+clear-selection \
+			--height=100% \
+			--border=none \
+      --color 'pointer:yellow,marker:yellow'
+			--prompt='$ flatpak uninstall ' \
+			--no-separator |
+		awk -F'\t' '{print $2}'
+)"
+
+if [ -z "${app}" ]; then
+	exit 1
+fi
+
+echo "flatpak uninstall" "${app}" "${@}" >&2
+flatpak uninstall "${app}" "${@}"
