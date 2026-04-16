@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Search Flatpak repository and display apps with fzf for install or uninstall.
+# Search Flatpak repository and display apps with fzf for install.
 # flatsearch tube
 
 if [ "${#}" -eq 0 ]; then
