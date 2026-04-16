@@ -25,6 +25,7 @@ app="$(
 )"
 
 if [ -z "${app}" ]; then
+	echo "No selection. Exiting!"
 	exit 1
 fi
 
