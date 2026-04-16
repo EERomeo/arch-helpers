@@ -25,11 +25,11 @@ if [[ -n "$pkg_names" ]]; then
 
   echo "$pkg_names" | tr '\n' ' ' | xargs sudo pacman -Rns --noconfirm
 
-#  if command -v updatedb &>/dev/null; then
-#    echo ""
-#    echo "Updating locate database..."
-#    sudo updatedb
-#  fi
+  if command -v updatedb &>/dev/null; then
+    echo ""
+    echo "Updating locate database..."
+    sudo updatedb
+  fi
 
   echo ""
   echo "✓ Removing complete!"
