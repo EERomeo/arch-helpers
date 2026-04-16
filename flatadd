@@ -30,6 +30,7 @@ app="$(
 )"
 
 if [ -z "${app}" ]; then
+	echo "No selection. Exiting!"
 	exit 1
 else
   echo "flatpak install" "${app}" "${@}" >&2
