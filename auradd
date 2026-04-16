@@ -30,7 +30,8 @@ if [[ -n "$pkg_names" ]]; then
   echo "Installing selected packages..."
   echo ""
 
-  echo "$pkg_names" | tr '\n' ' ' | xargs yay -S --noconfirm
+  # remove noconfirm if you want to confirm the actions
+  echo "$pkg_names" | tr '\n' ' ' | xargs yay -S --noconfirm 
 
   if command -v updatedb &>/dev/null; then
     echo ""
